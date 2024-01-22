@@ -1,4 +1,5 @@
 ﻿using Catstagram.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Catstagram.Server.Infrastructure
 {

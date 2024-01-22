@@ -18,7 +18,7 @@ namespace Catstagram.Server.Features.Cats
         {
             var userId = ((User)HttpContext.Items["User"]).Id;
 
-            var catId = this.catService.Create(model.ImageUrl, model.Description, userId);
+            int catId = await this.catService.Create(model.ImageUrl, model.Description, userId);
 
             return Created(nameof(this.Create), catId);
         }
