@@ -1,10 +1,10 @@
-﻿using Catstagram.Server.Controllers;
-
-namespace Catstagram.Server.Features.Cats
+﻿namespace Catstagram.Server.Features.Cats
 {
+    using Catstagram.Server.Controllers;
     using Catstagram.Server.Authorization;
     using Catstagram.Server.Data.Models;
     using Microsoft.AspNetCore.Mvc;
+    using Catstagram.Server.Infrastructure;
 
     public class CatsController : ApiController
     {
@@ -16,11 +16,16 @@ namespace Catstagram.Server.Features.Cats
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateCatRequestModel model)
         {
-            var userId = ((User)HttpContext.Items["User"]).Id;
+            var userId = HttpContext.GetId();
 
             int catId = await this.catService.Create(model.ImageUrl, model.Description, userId);
 
             return Created(nameof(this.Create), catId);
         }
+
+        [CustomAuthorization]
+        [HttpGet]
+        public async Task<IEnumerable<CatListingResponseModel>> Mine()
+            => await this.catService.ByUser(HttpContext.GetId());
     }
 }
