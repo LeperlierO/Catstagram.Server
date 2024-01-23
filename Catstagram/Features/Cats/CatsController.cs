@@ -7,6 +7,8 @@
     using Catstagram.Server.Features.Cats.Models;
     using Catstagram.Server.Infrastructure.Extensions;
 
+    using static Infrastructure.WebConstants;
+
     [CustomAuthorization]
     public class CatsController : ApiController
     {
@@ -15,7 +17,7 @@
         public CatsController(ICatService catService) => this.catService = catService;
 
         [HttpGet]
-        [Route("{id}")]
+        [Route(Id)]
         public async Task<ActionResult<CatDetailsServiceModel>> Details(int id)
             => await this.catService.Details(id);
 
@@ -41,6 +43,17 @@
             var updated = await this.catService.Update(model.Id, model.Description, userId);
 
             return updated ? Ok() : BadRequest();
+        }
+
+        [HttpDelete]
+        [Route(Id)]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var userId = HttpContext.GetId();
+
+            var deleted = await this.catService.Delete(id, userId);
+
+            return deleted ? Ok() : BadRequest();
         }
     }
 }
