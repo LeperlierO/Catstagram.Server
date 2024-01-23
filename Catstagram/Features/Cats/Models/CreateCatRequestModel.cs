@@ -9,6 +9,7 @@
         [Required]
         public string ImageUrl { get; set; }
 
+        [Required]
         [MaxLength(MaxDescriptionLength)]
         public string Description { get; set; }
     }
