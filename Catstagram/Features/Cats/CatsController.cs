@@ -4,15 +4,16 @@
     using Catstagram.Server.Authorization;
     using Catstagram.Server.Data.Models;
     using Microsoft.AspNetCore.Mvc;
-    using Catstagram.Server.Infrastructure;
+    using Catstagram.Server.Features.Cats.Models;
+    using Catstagram.Server.Infrastructure.Extensions;
 
+    [CustomAuthorization]
     public class CatsController : ApiController
     {
         private readonly ICatService catService;
 
         public CatsController(ICatService catService) => this.catService = catService;
 
-        [CustomAuthorization]
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateCatRequestModel model)
         {
@@ -23,9 +24,13 @@
             return Created(nameof(this.Create), catId);
         }
 
-        [CustomAuthorization]
         [HttpGet]
-        public async Task<IEnumerable<CatListingResponseModel>> Mine()
+        [Route("{id}")]
+        public async Task<ActionResult<CatDetailsServiceModel>> Details(int id)
+            => await this.catService.Details(id);
+
+        [HttpGet]
+        public async Task<IEnumerable<CatListingServiceModel>> Mine()
             => await this.catService.ByUser(HttpContext.GetId());
     }
 }

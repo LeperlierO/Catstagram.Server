@@ -1,4 +1,4 @@
-﻿namespace Catstagram.Server.Features.Identity
+﻿namespace Catstagram.Server.Features.Identity.Models
 {
     public class LoginResponseModel
     {

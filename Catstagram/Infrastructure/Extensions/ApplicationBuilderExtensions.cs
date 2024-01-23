@@ -1,7 +1,8 @@
 ﻿using Catstagram.Data;
+using Catstagram.Server.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Catstagram.Server.Infrastructure
+namespace Catstagram.Server.Infrastructure.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
@@ -10,7 +11,7 @@ namespace Catstagram.Server.Infrastructure
                     .UseSwaggerUI(options =>
                     {
                         options.SwaggerEndpoint("/swagger/v1/swagger.json", "My Catstagram API");
-                        options.RoutePrefix = String.Empty;
+                        options.RoutePrefix = string.Empty;
                     });
 
         public static void ApplyMigrations(this IApplicationBuilder app)

@@ -1,6 +1,7 @@
 using Catstagram.Data;
 using Catstagram.Server.Authorization;
-using Catstagram.Server.Infrastructure;
+using Catstagram.Server.Infrastructure.Extensions;
+using Catstagram.Server.Infrastructure.Filters;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,7 @@ builder.Services.AddDatabase(builder.Configuration)
                 .AddJwtAuthentication(builder.Configuration)
                 .AddApplicationServices()
                 .AddSwagger()
-                .AddControllers();
+                .AddApiControllers();
 
 // ===========
 // === APP ===

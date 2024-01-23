@@ -2,13 +2,14 @@
 using Catstagram.Server.Data.Models;
 using Catstagram.Server.Features.Cats;
 using Catstagram.Server.Features.Identity;
+using Catstagram.Server.Infrastructure.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Catstagram.Server.Infrastructure
+namespace Catstagram.Server.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
     {
@@ -38,7 +39,8 @@ namespace Catstagram.Server.Infrastructure
             var jwtKey = configuration.GetSection("Jwt:Key").Get<string>();
 
             services
-                .AddAuthentication(x => {
+                .AddAuthentication(x =>
+                {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -61,19 +63,23 @@ namespace Catstagram.Server.Infrastructure
         }
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
-        =>  services
+            => services
                 .AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<ICatService, CatService>();
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)
-        => services.AddSwaggerGen(c =>
+            => services.AddSwaggerGen(c =>
                 {
                     c.SwaggerDoc(
-                        "v1", 
-                        new Microsoft.OpenApi.Models.OpenApiInfo { 
-                            Title = "My Catstagram API", 
-                            Version = "v1" 
+                        "v1",
+                        new Microsoft.OpenApi.Models.OpenApiInfo
+                        {
+                            Title = "My Catstagram API",
+                            Version = "v1"
                         });
                 });
+
+        public static void AddApiControllers(this IServiceCollection services)
+            => services.AddControllers(options => options.Filters.Add<ModelOrNotFoundActionFilter>());
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Catstagram.Server.Features.Cats
+namespace Catstagram.Server.Features.Cats.Models
 {
-    public class CatListingResponseModel
+    public class CatListingServiceModel
     {
         public int Id { get; set; }
 

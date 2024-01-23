@@ -1,7 +1,9 @@
 ﻿using Catstagram.Data;
 using Catstagram.Data.Migrations;
 using Catstagram.Server.Data.Models;
+using Catstagram.Server.Features.Cats.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace Catstagram.Server.Features.Cats
 {
@@ -27,14 +29,29 @@ namespace Catstagram.Server.Features.Cats
             return cat.Id;
         }
 
-        public async Task<IEnumerable<CatListingResponseModel>> ByUser(string userId)
+        public async Task<IEnumerable<CatListingServiceModel>> ByUser(string userId)
             => await this.data
                     .Cats
                     .Where(c => c.User.Id == userId)
-                    .Select(c => new CatListingResponseModel
+                    .Select(c => new CatListingServiceModel
                     {
                         Id = c.Id,
                         ImageUrl = c.ImageUrl
                     }).ToListAsync();
+
+        public async Task<CatDetailsServiceModel> Details(int id)
+            => await this.data
+                .Cats
+                .Where(c => c.Id == id)
+                .Select(c => new CatDetailsServiceModel
+                {
+                    Id = c.Id,
+                    ImageUrl = c.ImageUrl,
+                    Description = c.Description,
+                    UserId = c.UserId,
+                    UserName = c.User.UserName
+                })
+                .FirstOrDefaultAsync();
+
     }
 }
