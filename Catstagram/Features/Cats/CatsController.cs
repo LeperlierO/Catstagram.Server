@@ -8,13 +8,19 @@
     using Catstagram.Server.Infrastructure.Extensions;
 
     using static Infrastructure.WebConstants;
+    using Catstagram.Server.Infrastructure.Services;
 
     [CustomAuthorization]
     public class CatsController : ApiController
     {
         private readonly ICatService catService;
+        private readonly ICurrentUserService currentUserService;
 
-        public CatsController(ICatService catService) => this.catService = catService;
+        public CatsController(ICatService catService, ICurrentUserService currentUserService)
+        {
+            this.catService = catService;
+            this.currentUserService = currentUserService;
+        }
 
         [HttpGet]
         [Route(Id)]
@@ -23,12 +29,12 @@
 
         [HttpGet]
         public async Task<IEnumerable<CatListingServiceModel>> Mine()
-            => await this.catService.ByUser(HttpContext.GetId());
+            => await this.catService.ByUser(this.currentUserService.GetId());
 
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateCatRequestModel model)
         {
-            var userId = HttpContext.GetId();
+            var userId = this.currentUserService.GetId();
 
             int catId = await this.catService.Create(model.ImageUrl, model.Description, userId);
 
@@ -38,7 +44,7 @@
         [HttpPut]
         public async Task<ActionResult> Update(UpdateCatRequestModel model)
         {
-            var userId = HttpContext.GetId();
+            var userId = this.currentUserService.GetId();
 
             var updated = await this.catService.Update(model.Id, model.Description, userId);
 
@@ -49,7 +55,7 @@
         [Route(Id)]
         public async Task<ActionResult> Delete(int id)
         {
-            var userId = HttpContext.GetId();
+            var userId = this.currentUserService.GetId();
 
             var deleted = await this.catService.Delete(id, userId);
 
