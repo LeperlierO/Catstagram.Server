@@ -11,3 +11,6 @@ dotnet_diagnostic.CS8602.severity = none
 
 # CS8604: Existence possible d'un argument de référence null.
 dotnet_diagnostic.CS8604.severity = none
+
+# CS8619: La nullabilité des types référence dans la valeur ne correspond pas au type cible.
+dotnet_diagnostic.CS8619.severity = none
