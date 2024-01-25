@@ -2,6 +2,7 @@
 using Catstagram.Server.Controllers;
 using Catstagram.Server.Data.Models;
 using Catstagram.Server.Features.Identity.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,7 @@ namespace Catstagram.Server.Features.Identity
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route(nameof(Register))]
         public async Task<ActionResult> Register(RegisterRequestModel model)
         {
@@ -46,6 +48,7 @@ namespace Catstagram.Server.Features.Identity
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route(nameof(Login))]
         public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)
         {

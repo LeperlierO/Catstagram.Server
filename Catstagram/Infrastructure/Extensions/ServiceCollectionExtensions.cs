@@ -1,6 +1,7 @@
 ﻿using Catstagram.Data;
 using Catstagram.Server.Data.Models;
 using Catstagram.Server.Features.Cats;
+using Catstagram.Server.Features.Follows;
 using Catstagram.Server.Features.Identity;
 using Catstagram.Server.Features.Profiles;
 using Catstagram.Server.Infrastructure.Filters;
@@ -69,6 +70,7 @@ namespace Catstagram.Server.Infrastructure.Extensions
                 .AddScoped<ICurrentUserService, CurrentUserService>()
                 .AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<ICatService, CatService>()
+                .AddTransient<IFollowService, FollowService>()
                 .AddTransient<IProfileService, ProfileService>();
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)

@@ -1,16 +1,12 @@
 ﻿namespace Catstagram.Server.Features.Cats
 {
     using Catstagram.Server.Controllers;
-    using Catstagram.Server.Authorization;
-    using Catstagram.Server.Data.Models;
     using Microsoft.AspNetCore.Mvc;
     using Catstagram.Server.Features.Cats.Models;
-    using Catstagram.Server.Infrastructure.Extensions;
 
     using static Infrastructure.WebConstants;
     using Catstagram.Server.Infrastructure.Services;
 
-    [CustomAuthorization]
     public class CatsController : ApiController
     {
         private readonly ICatService catService;

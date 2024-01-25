@@ -8,6 +8,7 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace Catstagram.Server.Features.Profiles
 {
+
     public class ProfilesController : ApiController
     {
         private readonly IProfileService profileService;
@@ -20,12 +21,10 @@ namespace Catstagram.Server.Features.Profiles
         }
 
         [HttpGet]
-        [CustomAuthorization]
         public async Task<ActionResult<ProfileServiceModel>> Mine()
             => await this.profileService.ByUser(this.currentUserService.GetId());
 
         [HttpPut]
-        [CustomAuthorization]
         public async Task<ActionResult> Update (UpdateProfileRequestModel model)
         {
             var userId = this.currentUserService.GetId();
