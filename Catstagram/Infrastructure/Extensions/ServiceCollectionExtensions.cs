@@ -4,6 +4,7 @@ using Catstagram.Server.Features.Cats;
 using Catstagram.Server.Features.Follows;
 using Catstagram.Server.Features.Identity;
 using Catstagram.Server.Features.Profiles;
+using Catstagram.Server.Features.Search;
 using Catstagram.Server.Infrastructure.Filters;
 using Catstagram.Server.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -71,6 +72,7 @@ namespace Catstagram.Server.Infrastructure.Extensions
                 .AddTransient<IIdentityService, IdentityService>()
                 .AddTransient<ICatService, CatService>()
                 .AddTransient<IFollowService, FollowService>()
+                .AddTransient<ISearchService, SearchService>()
                 .AddTransient<IProfileService, ProfileService>();
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)
