@@ -42,13 +42,14 @@
         }
 
         [HttpPut]
-        public async Task<ActionResult> Update(UpdateCatRequestModel model)
+        [Route(Id)]
+        public async Task<ActionResult> Update(int id, UpdateCatRequestModel model)
         {
             var userId = this.currentUserService.GetId();
 
-            var updated = await this.catService.Update(model.Id, model.Description, userId);
+            var result = await this.catService.Update(id, model.Description, userId);
 
-            return updated ? Ok() : BadRequest();
+            return result.Failure ? BadRequest() : Ok();
         }
 
         [HttpDelete]
@@ -57,9 +58,9 @@
         {
             var userId = this.currentUserService.GetId();
 
-            var deleted = await this.catService.Delete(id, userId);
+            var result = await this.catService.Delete(id, userId);
 
-            return deleted ? Ok() : BadRequest();
+            return result.Failure ? BadRequest() : Ok();
         }
     }
 }

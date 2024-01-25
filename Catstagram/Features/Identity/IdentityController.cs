@@ -1,4 +1,5 @@
-﻿using Catstagram.Server.Controllers;
+﻿using Catstagram.Data;
+using Catstagram.Server.Controllers;
 using Catstagram.Server.Data.Models;
 using Catstagram.Server.Features.Identity.Models;
 using Microsoft.AspNetCore.Identity;
@@ -8,15 +9,17 @@ namespace Catstagram.Server.Features.Identity
 {
     public class IdentityController : ApiController
     {
+        private readonly CatstagramDbContext data;
         private readonly UserManager<User> userManager;
         private IConfiguration configuration;
         public IIdentityService identityService;
 
-        public IdentityController(UserManager<User> userManager, IConfiguration config, IIdentityService identityService)
+        public IdentityController(UserManager<User> userManager, IConfiguration config, IIdentityService identityService, CatstagramDbContext data)
         {
             this.userManager = userManager;
             this.identityService = identityService;
             configuration = config;
+            this.data = data;
         }
 
         [HttpPost]
@@ -31,12 +34,15 @@ namespace Catstagram.Server.Features.Identity
 
             var result = await userManager.CreateAsync(user, model.Password);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                return Ok();
+                return BadRequest(result.Errors);
             }
 
-            return BadRequest(result.Errors);
+            data.Add(new Profile { UserId = user.Id, Name = model.UserName });
+            await data.SaveChangesAsync();
+
+            return Ok();
         }
 
         [HttpPost]

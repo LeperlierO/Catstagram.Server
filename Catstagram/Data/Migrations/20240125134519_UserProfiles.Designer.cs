@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catstagram.Data.Migrations
 {
     [DbContext(typeof(CatstagramDbContext))]
-    [Migration("20240124135807_UserProfiles")]
+    [Migration("20240125134519_UserProfiles")]
     partial class UserProfiles
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,6 +71,36 @@ namespace Catstagram.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Cats");
+                });
+
+            modelBuilder.Entity("Catstagram.Server.Data.Models.Profile", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Biography")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsPrivate")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MainPhotoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("WebSite")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("Catstagram.Server.Data.Models.User", b =>
@@ -294,46 +324,12 @@ namespace Catstagram.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Catstagram.Server.Data.Models.User", b =>
+            modelBuilder.Entity("Catstagram.Server.Data.Models.Profile", b =>
                 {
-                    b.OwnsOne("Catstagram.Server.Data.Models.Profile", "Profile", b1 =>
-                        {
-                            b1.Property<string>("UserId")
-                                .HasColumnType("nvarchar(450)");
-
-                            b1.Property<string>("Biography")
-                                .IsRequired()
-                                .HasMaxLength(150)
-                                .HasColumnType("nvarchar(150)");
-
-                            b1.Property<int>("Gender")
-                                .HasColumnType("int");
-
-                            b1.Property<bool>("IsPrivate")
-                                .HasColumnType("bit");
-
-                            b1.Property<string>("MainPhotoUrl")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasMaxLength(40)
-                                .HasColumnType("nvarchar(40)");
-
-                            b1.Property<string>("WebSite")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("UserId");
-
-                            b1.ToTable("AspNetUsers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId");
-                        });
-
-                    b.Navigation("Profile")
+                    b.HasOne("Catstagram.Server.Data.Models.User", null)
+                        .WithOne("Profile")
+                        .HasForeignKey("Catstagram.Server.Data.Models.Profile", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -391,6 +387,9 @@ namespace Catstagram.Data.Migrations
             modelBuilder.Entity("Catstagram.Server.Data.Models.User", b =>
                 {
                     b.Navigation("Cats");
+
+                    b.Navigation("Profile")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
