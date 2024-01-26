@@ -38,5 +38,12 @@ namespace Catstagram.Server.Features.Follows
 
             return true;
         }
+
+        public async Task<bool> IsFollower(string userId, string followerId)
+            => await this.data
+                         .Follows
+                         .AnyAsync(f => f.IsApproved &&
+                                        f.UserId == userId &&
+                                        f.FollowerId == followerId);
     }
 }
